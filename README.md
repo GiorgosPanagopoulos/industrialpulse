@@ -1,6 +1,6 @@
 <div align="center">
 
-# IndustrialPulse
+# 📡 IndustrialPulse
 
 **Real-time IoT/SCADA equipment monitoring — MQTT · InfluxDB · Grafana · Telegraf**
 
