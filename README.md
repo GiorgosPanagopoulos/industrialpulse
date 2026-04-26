@@ -165,8 +165,10 @@ Topic pattern: `machines/{machine_id}/telemetry`
 
 *I build things I'd trust with something that matters.*
 
-[![GitHub](https://img.shields.io/badge/GitHub-GiorgosPanagopoulos-181717?style=for-the-badge&logo=github)](https://github.com/GiorgosPanagopoulos)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Georgios%20Panagopoulos-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/georgiospanagopoulos)
+<br/><br/>
+<a href="https://github.com/GiorgosPanagopoulos"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/></a>
+<a href="https://linkedin.com/in/georgios-panagopoulos-9253842ba"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+<br/><br/>
 
 ⚡ Built by — Georgios Panagopoulos — Full-Stack Developer
 
