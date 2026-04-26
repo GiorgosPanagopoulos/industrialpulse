@@ -81,11 +81,9 @@ Open Grafana at **http://localhost:3000** → username `admin` → password from
 
 The **IndustrialPulse — Machine Monitoring** dashboard auto-provisions under the *IndustrialPulse* folder.
 
-## Dashboard
+## 📸 Dashboard
 
 ![IndustrialPulse Dashboard](docs/dashboard-screenshot.png)
-
-*Screenshot placeholder — run the stack and capture your own live dashboard.*
 
 The dashboard includes:
 - **3 rows** — one per machine
