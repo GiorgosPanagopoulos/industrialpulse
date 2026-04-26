@@ -163,9 +163,10 @@ Topic pattern: `machines/{machine_id}/telemetry`
 
 <div align="center">
 
-I build things I'd trust with something that matters.
+*I build things I'd trust with something that matters.*
 
-Built by **Georgios Panagopoulos** · [GitHub](https://github.com/gpana) · [LinkedIn](https://linkedin.com/in/georgiospanagopoulos)
+[![GitHub](https://img.shields.io/badge/GitHub-GiorgosPanagopoulos-181717?style=for-the-badge&logo=github)](https://github.com/GiorgosPanagopoulos)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Georgios%20Panagopoulos-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/georgiospanagopoulos)
 
 ⚡ Built by — Georgios Panagopoulos — Full-Stack Developer
 
