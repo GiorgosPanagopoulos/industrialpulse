@@ -3,7 +3,7 @@ apiVersion: 1
 groups:
   - orgId: 1
     name: machine-critical-alerts
-    folder: General
+    folder: IndustrialPulse
     interval: 30s
     rules:
 
