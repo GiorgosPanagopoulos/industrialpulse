@@ -1,0 +1,516 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "CNC Mill — cnc_01",
+      "type": "row"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 14, "x": 0, "y": 1 },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": ["last", "max", "min"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"cnc_01\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\" or r[\"_field\"] == \"vibration\" or r[\"_field\"] == \"spindle_rpm\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "CNC Mill — Sensors",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            {
+              "options": {
+                "critical": { "color": "red", "index": 2, "text": "CRITICAL" },
+                "normal":   { "color": "green", "index": 0, "text": "NORMAL" },
+                "warning":  { "color": "orange", "index": 1, "text": "WARNING" }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 4, "x": 14, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: -2m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"cnc_01\")\n  |> filter(fn: (r) => r[\"_field\"] == \"status\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "CNC Mill — Status",
+      "type": "stat"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "max": 110,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 85 },
+              { "color": "red", "value": 95 }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 1 },
+      "id": 4,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: -2m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"cnc_01\")\n  |> filter(fn: (r) => r[\"_field\"] == \"temperature\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "CNC Mill — Temperature",
+      "type": "gauge"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 9 },
+      "id": 5,
+      "title": "Hydraulic Press — press_02",
+      "type": "row"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 14, "x": 0, "y": 10 },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": ["last", "max", "min"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"press_02\")\n  |> filter(fn: (r) => r[\"_field\"] == \"pressure\" or r[\"_field\"] == \"oil_temperature\" or r[\"_field\"] == \"cycle_count\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Hydraulic Press — Sensors",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            {
+              "options": {
+                "critical": { "color": "red", "index": 2, "text": "CRITICAL" },
+                "normal":   { "color": "green", "index": 0, "text": "NORMAL" },
+                "warning":  { "color": "orange", "index": 1, "text": "WARNING" }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 4, "x": 14, "y": 10 },
+      "id": 7,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: -2m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"press_02\")\n  |> filter(fn: (r) => r[\"_field\"] == \"status\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Hydraulic Press — Status",
+      "type": "stat"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "max": 160,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 130 },
+              { "color": "red", "value": 145 }
+            ]
+          },
+          "unit": "pressurembar"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 10 },
+      "id": 8,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: -2m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"press_02\")\n  |> filter(fn: (r) => r[\"_field\"] == \"pressure\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Hydraulic Press — Pressure",
+      "type": "gauge"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 18 },
+      "id": 9,
+      "title": "Conveyor Belt — conveyor_03",
+      "type": "row"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 14, "x": 0, "y": 19 },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": ["last", "max", "min"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"conveyor_03\")\n  |> filter(fn: (r) => r[\"_field\"] == \"belt_speed\" or r[\"_field\"] == \"motor_current\" or r[\"_field\"] == \"items_per_minute\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Conveyor Belt — Sensors",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [
+            {
+              "options": {
+                "critical": { "color": "red", "index": 2, "text": "CRITICAL" },
+                "normal":   { "color": "green", "index": 0, "text": "NORMAL" },
+                "warning":  { "color": "orange", "index": 1, "text": "WARNING" }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 4, "x": 14, "y": 19 },
+      "id": 11,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: -2m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"conveyor_03\")\n  |> filter(fn: (r) => r[\"_field\"] == \"status\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Conveyor Belt — Status",
+      "type": "stat"
+    },
+
+    {
+      "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "max": 3,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "orange", "value": 0.3 },
+              { "color": "green", "value": 0.5 },
+              { "color": "orange", "value": 2.3 },
+              { "color": "red", "value": 2.5 }
+            ]
+          },
+          "unit": "velocityms"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 19 },
+      "id": 12,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "influxdb-industrialpulse" },
+          "hide": false,
+          "query": "from(bucket: \"machines\")\n  |> range(start: -2m)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"machine_telemetry\")\n  |> filter(fn: (r) => r[\"machine_id\"] == \"conveyor_03\")\n  |> filter(fn: (r) => r[\"_field\"] == \"belt_speed\")\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Conveyor Belt — Belt Speed",
+      "type": "gauge"
+    }
+
+  ],
+
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "tags": ["industrialpulse", "iot", "scada"],
+
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Machine",
+        "multi": false,
+        "name": "machine",
+        "options": [
+          { "selected": true,  "text": "All",          "value": "$__all"      },
+          { "selected": false, "text": "cnc_01",       "value": "cnc_01"      },
+          { "selected": false, "text": "press_02",     "value": "press_02"    },
+          { "selected": false, "text": "conveyor_03",  "value": "conveyor_03" }
+        ],
+        "query": "cnc_01,press_02,conveyor_03",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "IndustrialPulse — Machine Monitoring",
+  "uid": "industrialpulse-main",
+  "version": 1,
+  "weekStart": ""
+}

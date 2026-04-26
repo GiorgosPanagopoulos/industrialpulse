@@ -1,0 +1,185 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: machine-critical-alerts
+    folder: General
+    interval: 30s
+    rules:
+
+      # -----------------------------------------------------------------------
+      # CNC Mill — cnc_01
+      # -----------------------------------------------------------------------
+      - uid: cnc01-critical-alert
+        title: cnc_01_critical
+        condition: threshold
+        data:
+          - refId: status
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: influxdb-industrialpulse
+            model:
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |
+                from(bucket: "machines")
+                  |> range(start: -1m)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_telemetry")
+                  |> filter(fn: (r) => r["machine_id"] == "cnc_01")
+                  |> filter(fn: (r) => r["_field"] == "status")
+                  |> last()
+                  |> map(fn: (r) => ({r with _value: if r._value == "critical" then 1.0 else 0.0}))
+              refId: status
+          - refId: threshold
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "-100"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0.5]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [status]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: threshold
+              type: classic_conditions
+        noDataState: NoData
+        execErrState: Error
+        for: 30s
+        annotations:
+          description: "CNC Mill cnc_01 has been in critical state for over 30 seconds."
+          summary: "CNC Mill Critical — cnc_01"
+        labels:
+          machine: cnc_01
+          severity: critical
+        isPaused: false
+
+      # -----------------------------------------------------------------------
+      # Hydraulic Press — press_02
+      # -----------------------------------------------------------------------
+      - uid: press02-critical-alert
+        title: press_02_critical
+        condition: threshold
+        data:
+          - refId: status
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: influxdb-industrialpulse
+            model:
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |
+                from(bucket: "machines")
+                  |> range(start: -1m)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_telemetry")
+                  |> filter(fn: (r) => r["machine_id"] == "press_02")
+                  |> filter(fn: (r) => r["_field"] == "status")
+                  |> last()
+                  |> map(fn: (r) => ({r with _value: if r._value == "critical" then 1.0 else 0.0}))
+              refId: status
+          - refId: threshold
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "-100"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0.5]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [status]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: threshold
+              type: classic_conditions
+        noDataState: NoData
+        execErrState: Error
+        for: 30s
+        annotations:
+          description: "Hydraulic Press press_02 has been in critical state for over 30 seconds."
+          summary: "Hydraulic Press Critical — press_02"
+        labels:
+          machine: press_02
+          severity: critical
+        isPaused: false
+
+      # -----------------------------------------------------------------------
+      # Conveyor Belt — conveyor_03
+      # -----------------------------------------------------------------------
+      - uid: conveyor03-critical-alert
+        title: conveyor_03_critical
+        condition: threshold
+        data:
+          - refId: status
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: influxdb-industrialpulse
+            model:
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              query: |
+                from(bucket: "machines")
+                  |> range(start: -1m)
+                  |> filter(fn: (r) => r["_measurement"] == "machine_telemetry")
+                  |> filter(fn: (r) => r["machine_id"] == "conveyor_03")
+                  |> filter(fn: (r) => r["_field"] == "status")
+                  |> last()
+                  |> map(fn: (r) => ({r with _value: if r._value == "critical" then 1.0 else 0.0}))
+              refId: status
+          - refId: threshold
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "-100"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0.5]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [status]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: threshold
+              type: classic_conditions
+        noDataState: NoData
+        execErrState: Error
+        for: 30s
+        annotations:
+          description: "Conveyor Belt conveyor_03 has been in critical state for over 30 seconds."
+          summary: "Conveyor Belt Critical — conveyor_03"
+        labels:
+          machine: conveyor_03
+          severity: critical
+        isPaused: false
